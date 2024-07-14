@@ -50,3 +50,34 @@ Dies ist ein Kommandozeilen-Interface (CLI) Programm zur Verwaltung einer Musikb
 Die Datei sollte Einträge im folgenden Format enthalten:
   ```sh
   "title" "album" "artist" year
+  ```
+### Designentscheidungen und Reflektion
+
+#### Designentscheidungen
+
+1. **Einsatz konkreter Klassen:**
+   - **`MusicTitle` Klasse:** Diese Klasse repräsentiert einen Musiktitel mit den Attributen Titel, Album, Künstler und Erscheinungsjahr. Eine konkrete Klasse wurde hier gewählt, da sie eine spezifische und eindeutige Datenstruktur benötigt, um Musiktitel zu repräsentieren. Die Rolle dieser Klasse ist es, als Datencontainer zu fungieren und die grundlegenden Informationen eines Musiktitels zu speichern.
+   - **`LibraryProvider` Klasse:** Diese Klasse verwaltet eine Sammlung von `MusicTitle` Objekten. Sie bietet Funktionen zum Laden und Speichern der Bibliothek aus/in eine Datei, zum Hinzufügen neuer Titel, zum Auflisten aller Titel sowie zum Suchen und Finden von Titeln. Diese Klasse wurde als konkrete Klasse gestaltet, um eine zentrale Stelle für alle Operationen zu bieten, die auf die Musiksammlung angewendet werden.
+
+2. **Keine Einführung von Interfaces oder abstrakten Klassen:**
+   - **Warum keine Interfaces oder abstrakten Klassen?** Da das Programm relativ klein und spezifisch ist, war die Einführung von Interfaces oder abstrakten Klassen nicht notwendig. Die Verwendung von konkreten Klassen bietet ausreichend Flexibilität und Einfachheit für die gegebenen Anforderungen. Die Struktur des Programms ist direkt und ohne unnötige Abstraktionen gehalten, was die Verständlichkeit und Wartbarkeit verbessert.
+
+#### Alternativen und Überlegungen
+
+- **Verwendung von abstrakten Klassen oder Interfaces:**
+  - **Alternative:** Eine mögliche Alternative wäre die Einführung eines Interfaces wie `IMusicLibrary`, das grundlegende Operationen wie `loadFromFile`, `saveToFile`, `addMusicTitle`, `listMusicTitles`, `findTitle` und `search` definiert. `LibraryProvider` könnte dann dieses Interface implementieren.
+  - **Gründe gegen die Alternative:** Für die aktuelle Größe und Komplexität des Projekts würde die Einführung eines Interfaces zusätzlichen Overhead und Komplexität ohne einen signifikanten Nutzen hinzufügen. Interfaces sind besonders nützlich, wenn mehrere Implementierungen desselben Interfaces erforderlich sind, was hier nicht der Fall ist.
+
+#### Reflektion über die Arbeit
+
+- **Besondere Highlights:**
+  - **Klare und einfache Struktur:** Das Programm hat eine klare und einfache Struktur, was die Verständlichkeit und Wartbarkeit verbessert.
+  - **Einsatz von Assertions:** Die Verwendung von Assertions hilft, Fehler frühzeitig zu erkennen und sicherzustellen, dass die Eingabedaten den erwarteten Bedingungen entsprechen.
+
+- **Besondere Schwachstellen:**
+  - **Fehlende Abstraktion für zukünftige Erweiterungen:** Sollte das Programm in Zukunft erweitert werden (z.B. durch Unterstützung für mehrere Dateiformate oder erweiterte Suchfunktionen), könnte das Fehlen von Interfaces oder abstrakten Klassen die Erweiterbarkeit einschränken. Diese Schwachstelle wurde nicht beseitigt, da die aktuelle Implementierung die Anforderungen vollständig erfüllt und die Einfachheit der Struktur beibehalten wurde.
+  - **Fehlende Fehlerbehandlung:** Derzeit gibt es eine begrenzte Fehlerbehandlung, insbesondere bei Dateioperationen. Verbesserte Fehlerbehandlung könnte implementiert werden, um das Programm robuster zu machen. Dies wurde nicht weiter verfolgt, um die Einfachheit des Codes zu bewahren und den Fokus auf die grundlegenden Funktionen zu legen.
+
+#### Fazit
+
+Die Designentscheidungen basieren auf der aktuellen Größe und Komplexität des Projekts sowie den spezifischen Anforderungen. Durch die Verwendung konkreter Klassen und die Vermeidung unnötiger Abstraktionen bleibt der Code einfach und wartbar. Zukünftige Erweiterungen könnten von einer Überarbeitung der Struktur profitieren, um Interfaces oder abstrakte Klassen einzuführen, falls komplexere Anforderungen entstehen.
