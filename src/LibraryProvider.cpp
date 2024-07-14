@@ -4,8 +4,11 @@
 #include <sstream>
 #include <iomanip>
 #include <algorithm>
+#include <cassert>
 
 void LibraryProvider::loadFromFile(const std::string& filename) {
+    assert(!filename.empty() && "Filename should not be empty");
+
     std::ifstream file(filename);
     if (!file.is_open()) {
         std::cerr << "Could not open the file!" << std::endl;
@@ -18,6 +21,7 @@ void LibraryProvider::loadFromFile(const std::string& filename) {
         std::string title, album, artist;
         int releaseYear;
         ss >> std::quoted(title) >> std::quoted(album) >> std::quoted(artist) >> releaseYear;
+        assert(ss && "Failed to read music title from file");
         musicTitles.emplace_back(title, album, artist, releaseYear);
     }
 
@@ -25,6 +29,8 @@ void LibraryProvider::loadFromFile(const std::string& filename) {
 }
 
 void LibraryProvider::saveToFile(const std::string& filename) const {
+    assert(!filename.empty() && "Filename should not be empty");
+
     std::ofstream file(filename);
     if (!file.is_open()) {
         std::cerr << "Could not open the file!" << std::endl;
@@ -40,6 +46,11 @@ void LibraryProvider::saveToFile(const std::string& filename) const {
 }
 
 void LibraryProvider::addMusicTitle(const MusicTitle& musicTitle) {
+    assert(!musicTitle.title.empty() && "Title should not be empty");
+    assert(!musicTitle.album.empty() && "Album should not be empty");
+    assert(!musicTitle.artist.empty() && "Artist should not be empty");
+    assert(musicTitle.releaseYear > 0 && "Release year should be positive");
+
     musicTitles.push_back(musicTitle);
 }
 
@@ -61,6 +72,8 @@ void LibraryProvider::listMusicTitles() const {
 }
 
 void LibraryProvider::findTitle(const std::string& title) const {
+    assert(!title.empty() && "Title should not be empty");
+
     for (const auto& musicTitle : musicTitles) {
         if (musicTitle.title == title) {
             std::cout << musicTitle.title << " " << musicTitle.album << " " << musicTitle.artist << " " << musicTitle.releaseYear << std::endl;
@@ -69,6 +82,8 @@ void LibraryProvider::findTitle(const std::string& title) const {
 }
 
 void LibraryProvider::search(const std::string& pattern) const {
+    assert(!pattern.empty() && "Search pattern should not be empty");
+
     for (const auto& musicTitle : musicTitles) {
         if (musicTitle.title.find(pattern) != std::string::npos ||
             musicTitle.album.find(pattern) != std::string::npos ||

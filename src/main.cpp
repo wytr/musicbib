@@ -1,6 +1,7 @@
 #include "LibraryProvider.h"
 #include <iostream>
 #include <string>
+#include <cassert>
 
 void printUsage() {
     std::cout << "Usage: musicbib <command> [<parameter>]\n"
@@ -12,6 +13,8 @@ void printUsage() {
 }
 
 int main(int argc, char* argv[]) {
+    assert(argc > 0 && "Argument count should be greater than 0");
+
     if (argc < 2) {
         printUsage();
         return 1;
@@ -34,6 +37,7 @@ int main(int argc, char* argv[]) {
         std::string album = argv[3];
         std::string artist = argv[4];
         int year = std::stoi(argv[5]);
+        assert(year > 0 && "Year should be a positive integer");
         libraryProvider.addMusicTitle(MusicTitle(title, album, artist, year));
     } else {
         printUsage();
