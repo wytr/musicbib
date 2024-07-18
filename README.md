@@ -57,9 +57,9 @@ Die Datei sollte Einträge im folgenden Format enthalten:
 
 1. **Einsatz konkreter Klassen:**
    - **`MusicTitle` Klasse:** Diese Klasse repräsentiert einen Musiktitel mit den Attributen Titel, Album, Künstler und Erscheinungsjahr. Eine konkrete Klasse wurde hier gewählt, da sie eine spezifische und eindeutige Datenstruktur benötigt, um Musiktitel zu repräsentieren. Die Rolle dieser Klasse ist es, als Datencontainer zu fungieren und die grundlegenden Informationen eines Musiktitels zu speichern.
-   - **`LibraryProvider` Klasse:** Diese Klasse verwaltet eine Sammlung von `MusicTitle` Objekten. Sie bietet Funktionen zum Laden und Speichern der Bibliothek aus/in eine Datei, zum Hinzufügen neuer Titel, zum Auflisten aller Titel sowie zum Suchen und Finden von Titeln. Diese Klasse wurde als konkrete Klasse gestaltet, um eine zentrale Stelle für alle Operationen zu bieten, die auf die Musiksammlung angewendet werden.
-
-2. **Keine Einführung von Interfaces oder abstrakten Klassen:**
+   - **`LibraryProvider` Klasse:** Diese Klasse verwaltet eine Sammlung von `MusicTitle` Objekten. Sie bietet Funktionen zum Laden und Speichern der Bibliothek aus/in eine Datei, zum Hinzufügen neuer Titel, zum Auflisten aller Titel sowie zum Suchen und Finden von Titeln. <del>Diese Klasse wurde als konkrete Klasse gestaltet, um eine zentrale Stelle für alle Operationen zu bieten, die auf die Musiksammlung angewendet werden.</del>
+   - **`IMusicLibrary` Interface:** Um die einfache Implementierung weiterer Provider zu erlauben wurde im Anschluss auf einem Feature-Branch die Abstraktion eingeführt. Damit könnte nun beispielsweise ein Provider implementiert werden, der das Dateiformat JSON unterstützt. Hierzu würde ich die Library von [nlohmann](https://github.com/nlohmann/json) verwenden.
+2. **Keine Einführung von Interfaces oder abstrakten Klassen: (veraltet/wenn eine einfache Textdatei reicht! KEEP IT SIMPLE STUPID)** 
    - **Warum keine Interfaces oder abstrakten Klassen?** Da das Programm relativ klein und spezifisch ist, war die Einführung von Interfaces oder abstrakten Klassen nicht notwendig. Die Verwendung von konkreten Klassen bietet ausreichend Flexibilität und Einfachheit für die gegebenen Anforderungen. Die Struktur des Programms ist direkt und ohne unnötige Abstraktionen gehalten, was die Verständlichkeit und Wartbarkeit verbessert.
 
 #### Alternativen und Überlegungen
