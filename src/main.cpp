@@ -21,29 +21,31 @@ int main(int argc, char* argv[]) {
     }
 
     const std::string filename = "musiclibrary.txt";
-    LibraryProvider libraryProvider;
-    libraryProvider.loadFromFile(filename);
+    IMusicLibrary* libraryProvider = new LibraryProvider();
+    libraryProvider->loadFromFile(filename);
 
     std::string command = argv[1];
 
     if (command == "list") {
-        libraryProvider.listMusicTitles();
+        libraryProvider->listMusicTitles();
     } else if (command == "find" && argc == 3) {
-        libraryProvider.findTitle(argv[2]);
+        libraryProvider->findTitle(argv[2]);
     } else if (command == "search" && argc == 3) {
-        libraryProvider.search(argv[2]);
+        libraryProvider->search(argv[2]);
     } else if (command == "add" && argc == 6) {
         std::string title = argv[2];
         std::string album = argv[3];
         std::string artist = argv[4];
         int year = std::stoi(argv[5]);
         assert(year > 0 && "Year should be a positive integer");
-        libraryProvider.addMusicTitle(MusicTitle(title, album, artist, year));
+        libraryProvider->addMusicTitle(MusicTitle(title, album, artist, year));
     } else {
         printUsage();
+        delete libraryProvider;
         return 1;
     }
 
-    libraryProvider.saveToFile(filename);
+    libraryProvider->saveToFile(filename);
+    delete libraryProvider;
     return 0;
 }
