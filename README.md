@@ -67,7 +67,21 @@ Die Datei sollte Einträge im folgenden Format enthalten:
 - **Verwendung von abstrakten Klassen oder Interfaces:**
   - **Alternative:** Eine mögliche Alternative wäre die Einführung eines Interfaces wie `IMusicLibrary`, das grundlegende Operationen wie `loadFromFile`, `saveToFile`, `addMusicTitle`, `listMusicTitles`, `findTitle` und `search` definiert. `LibraryProvider` könnte dann dieses Interface implementieren.
   - **Gründe gegen die Alternative:** Für die aktuelle Größe und Komplexität des Projekts würde die Einführung eines Interfaces zusätzlichen Overhead und Komplexität ohne einen signifikanten Nutzen hinzufügen. Interfaces sind besonders nützlich, wenn mehrere Implementierungen desselben Interfaces erforderlich sind, was hier nicht der Fall ist.
+  - **Siehe Branch "IMusicLibrary"**
 
+```
+class IMusicLibrary {
+public:
+    virtual ~IMusicLibrary() = default;
+
+    virtual void loadFromFile(const std::string& filename) = 0;
+    virtual void saveToFile(const std::string& filename) const = 0;
+    virtual void addMusicTitle(const MusicTitle& musicTitle) = 0;
+    virtual void listMusicTitles() const = 0;
+    virtual void findTitle(const std::string& title) const = 0;
+    virtual void search(const std::string& pattern) const = 0;
+};
+```
 #### Reflektion über die Arbeit
 
 - **Besondere Highlights:**
