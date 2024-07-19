@@ -16,6 +16,7 @@ void LibraryProvider::loadFromFile(const std::string& filename) {
     }
 
     std::string line;
+    // TODO: Sort Items before placing into std::vector<MusicTitle> (Output of list-command will be sorted)
     while (std::getline(file, line)) {
         std::istringstream ss(line);
         std::string title, album, artist;
@@ -29,6 +30,7 @@ void LibraryProvider::loadFromFile(const std::string& filename) {
 }
 
 void LibraryProvider::saveToFile(const std::string& filename) const {
+    // TODO: Save the sorted library
     assert(!filename.empty() && "Filename should not be empty");
 
     std::ofstream file(filename);
@@ -82,6 +84,7 @@ void LibraryProvider::findTitle(const std::string& title) const {
 }
 
 void LibraryProvider::search(const std::string& pattern) const {
+    // TODO: different search patterns/options
     assert(!pattern.empty() && "Search pattern should not be empty");
 
     for (const auto& musicTitle : musicTitles) {
