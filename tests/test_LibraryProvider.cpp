@@ -47,3 +47,22 @@ TEST_F(LibraryProviderTest, SearchPattern) {
     ASSERT_NE(output.str().find("TestTitle1"), std::string::npos);
     ASSERT_NE(output.str().find("TestTitle2"), std::string::npos);
 }
+
+TEST_F(LibraryProviderTest, AddMusicTitleInvalidYear) {
+    try {
+        std::string title = "InvalidYearTitle";
+        std::string album = "InvalidYearAlbum";
+        std::string artist = "InvalidYearArtist";
+        std::string invalidYear = "InvalidYear";
+
+        // This should throw an exception
+        int year = std::stoi(invalidYear);
+        libraryProvider.addMusicTitle(MusicTitle(title, album, artist, year));
+
+        FAIL() << "Expected std::invalid_argument";
+    } catch (const std::invalid_argument& e) {
+        EXPECT_EQ(std::string(e.what()), "stoi");
+    } catch (...) {
+        FAIL() << "Expected std::invalid_argument";
+    }
+}
