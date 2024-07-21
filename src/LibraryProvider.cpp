@@ -90,11 +90,12 @@ void LibraryProvider::findTitle(const std::string& title) const {
 
 void LibraryProvider::search(const std::string& pattern) const {
     assert(!pattern.empty() && "Search pattern should not be empty");
-
+    
     for (const auto& musicTitle : musicTitles) {
         if (musicTitle.title.find(pattern) != std::string::npos ||
             musicTitle.album.find(pattern) != std::string::npos ||
-            musicTitle.artist.find(pattern) != std::string::npos) {
+            musicTitle.artist.find(pattern) != std::string::npos ||
+            std::to_string(musicTitle.releaseYear).find(pattern) != std::string::npos) {
             std::cout << musicTitle.title << " " << musicTitle.album << " " << musicTitle.artist << " " << musicTitle.releaseYear << std::endl;
         }
     }
