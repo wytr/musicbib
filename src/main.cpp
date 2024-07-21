@@ -2,6 +2,7 @@
 #include <iostream>
 #include <string>
 #include <cassert>
+#include <cstdlib>
 
 void printUsage() {
     std::cout << "Usage: musicbib <command> [<parameter>]\n"
@@ -36,9 +37,18 @@ int main(int argc, char* argv[]) {
         std::string title = argv[2];
         std::string album = argv[3];
         std::string artist = argv[4];
-        int year = std::stoi(argv[5]);
-        assert(year > 0 && "Year should be a positive integer");
-        libraryProvider->addMusicTitle(MusicTitle(title, album, artist, year));
+        try {
+            int year = std::stoi(argv[5]);
+            if (year <= 0) {
+                throw std::invalid_argument("Year should be a positive integer");
+            }
+            libraryProvider->addMusicTitle(MusicTitle(title, album, artist, year));
+        } catch (const std::invalid_argument& e) {
+            std::cerr << "Error: Invalid year format. Year should be a positive integer.\n";
+            printUsage();
+            delete libraryProvider;
+            return 1;
+        }
     } else {
         printUsage();
         delete libraryProvider;
