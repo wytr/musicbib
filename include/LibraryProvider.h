@@ -7,6 +7,7 @@
 #include <string>
 
 class LibraryProvider : public IMusicLibrary {
+
 public:
     std::vector<MusicTitle> musicTitles;
 
@@ -16,6 +17,8 @@ public:
     void listMusicTitles() const override;
     void findTitle(const std::string& title) const override;
     void search(const std::string& pattern) const override;
+private:
+    void sortMusicTitles(std::vector<MusicTitle>& titles) const;
 };
 
 #endif // LIBRARYPROVIDER_H

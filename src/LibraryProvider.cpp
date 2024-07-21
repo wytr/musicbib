@@ -15,16 +15,19 @@ void LibraryProvider::loadFromFile(const std::string& filename) {
         return;
     }
 
+    std::vector<MusicTitle> tempTitles;
     std::string line;
-    // TODO: Sort Items before placing into std::vector<MusicTitle> (Output of list-command will be sorted)
     while (std::getline(file, line)) {
         std::istringstream ss(line);
         std::string title, album, artist;
         int releaseYear;
         ss >> std::quoted(title) >> std::quoted(album) >> std::quoted(artist) >> releaseYear;
         assert(ss && "Failed to read music title from file");
-        musicTitles.emplace_back(title, album, artist, releaseYear);
+        tempTitles.emplace_back(title, album, artist, releaseYear);
     }
+
+    sortMusicTitles(tempTitles);
+    musicTitles = std::move(tempTitles);
 
     file.close();
 }
@@ -53,12 +56,8 @@ void LibraryProvider::addMusicTitle(const MusicTitle& musicTitle) {
     assert(!musicTitle.artist.empty() && "Artist should not be empty");
     assert(musicTitle.releaseYear > 0 && "Release year should be positive");
 
-    musicTitles.push_back(musicTitle);
-}
-
-void LibraryProvider::listMusicTitles() const {
-    auto sortedTitles = musicTitles;
-    std::sort(sortedTitles.begin(), sortedTitles.end(), [](const MusicTitle& a, const MusicTitle& b) {
+    // Find the correct position to insert the new title to maintain sorted order
+    auto it = std::lower_bound(musicTitles.begin(), musicTitles.end(), musicTitle, [](const MusicTitle& a, const MusicTitle& b) {
         if (a.artist == b.artist) {
             if (a.album == b.album) {
                 return a.title < b.title;
@@ -68,6 +67,12 @@ void LibraryProvider::listMusicTitles() const {
         return a.artist < b.artist;
     });
 
+    musicTitles.insert(it, musicTitle);
+}
+
+void LibraryProvider::listMusicTitles() const {
+    // musicTitles gets saved in sorted order on "LibraryProvider::loadFromFile" this way there is no need to sort again when listing all titles.
+    auto sortedTitles = musicTitles;
     for (const auto& musicTitle : sortedTitles) {
         std::cout << musicTitle.title << " " << musicTitle.album << " " << musicTitle.artist << " " << musicTitle.releaseYear << std::endl;
     }
@@ -84,7 +89,6 @@ void LibraryProvider::findTitle(const std::string& title) const {
 }
 
 void LibraryProvider::search(const std::string& pattern) const {
-    // TODO: different search patterns/options
     assert(!pattern.empty() && "Search pattern should not be empty");
 
     for (const auto& musicTitle : musicTitles) {
@@ -94,4 +98,16 @@ void LibraryProvider::search(const std::string& pattern) const {
             std::cout << musicTitle.title << " " << musicTitle.album << " " << musicTitle.artist << " " << musicTitle.releaseYear << std::endl;
         }
     }
+}
+
+void LibraryProvider::sortMusicTitles(std::vector<MusicTitle>& titles) const {
+    std::sort(titles.begin(), titles.end(), [](const MusicTitle& a, const MusicTitle& b) {
+        if (a.artist == b.artist) {
+            if (a.album == b.album) {
+                return a.title < b.title;
+            }
+            return a.album < b.album;
+        }
+        return a.artist < b.artist;
+    });
 }
