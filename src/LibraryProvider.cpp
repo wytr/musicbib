@@ -24,7 +24,7 @@ void LibraryProvider::loadFromFile(const std::string& filename) {
         assert(ss && "Failed to read music title from file");
         musicTitles.emplace_back(title, album, artist, releaseYear);
     }
-
+    sortMusicTitles(musicTitles);
 
     file.close();
 }
@@ -54,7 +54,11 @@ void LibraryProvider::addMusicTitle(const MusicTitle& musicTitle) {
     assert(musicTitle.releaseYear > 0 && "Release year should be positive");
 
     // Find the correct position to insert the new title to maintain sorted order
-    auto it = std::lower_bound(musicTitles.begin(), musicTitles.end(), musicTitle, [](const MusicTitle& a, const MusicTitle& b) {
+    sortMusicTitles(musicTitles);
+}
+
+void LibraryProvider::sortMusicTitles(std::vector<MusicTitle>& titles) const {
+    std::sort(titles.begin(), titles.end(), [](const MusicTitle& a, const MusicTitle& b) {
         if (a.artist == b.artist) {
             if (a.album == b.album) {
                 return a.title < b.title;
@@ -63,8 +67,6 @@ void LibraryProvider::addMusicTitle(const MusicTitle& musicTitle) {
         }
         return a.artist < b.artist;
     });
-
-    musicTitles.insert(it, musicTitle);
 }
 
 // Helper function to truncate string if it exceeds max length
