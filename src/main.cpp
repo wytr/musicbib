@@ -49,7 +49,7 @@ int main(int argc, char* argv[]) {
             delete libraryProvider;
             return 1;
         }catch (const std::out_of_range& e) {
-            std::cerr << "Hey there in the Future.\n";
+            std::cerr << "hello man of the future. your year unfortunately reaches int overflow.\n";
             printUsage();
             delete libraryProvider;
             return 1;

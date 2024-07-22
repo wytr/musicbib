@@ -15,7 +15,6 @@ void LibraryProvider::loadFromFile(const std::string& filename) {
         return;
     }
 
-    std::vector<MusicTitle> tempTitles;
     std::string line;
     while (std::getline(file, line)) {
         std::istringstream ss(line);
@@ -23,11 +22,9 @@ void LibraryProvider::loadFromFile(const std::string& filename) {
         int releaseYear;
         ss >> std::quoted(title) >> std::quoted(album) >> std::quoted(artist) >> releaseYear;
         assert(ss && "Failed to read music title from file");
-        tempTitles.emplace_back(title, album, artist, releaseYear);
+        musicTitles.emplace_back(title, album, artist, releaseYear);
     }
 
-    sortMusicTitles(tempTitles);
-    musicTitles = std::move(tempTitles);
 
     file.close();
 }
@@ -70,13 +67,44 @@ void LibraryProvider::addMusicTitle(const MusicTitle& musicTitle) {
     musicTitles.insert(it, musicTitle);
 }
 
+// Helper function to truncate string if it exceeds max length
+std::string truncateString(const std::string& str, size_t maxLength) {
+    if (str.length() > maxLength) {
+        return str.substr(0, maxLength - 3) + "...";
+    }
+    return str;
+}
+
 void LibraryProvider::listMusicTitles() const {
     // musicTitles gets saved in sorted order on "LibraryProvider::loadFromFile" this way there is no need to sort again when listing all titles.
     auto sortedTitles = musicTitles;
+    
+    // Print header
+    std::cout << std::left
+              << std::setw(30) << "| Title"
+              << std::setw(20) << "| Album"
+              << std::setw(20) << "| Artist"
+              << std::setw(10) << "| Year |" << std::endl;
+    
+    // Print a line under the header
+    std::cout << std::setfill('-')
+              << std::setw(82) << "+" << std::setfill(' ') << std::endl;
+    
+    // Print each music title in a formatted manner with vertical lines
     for (const auto& musicTitle : sortedTitles) {
-        std::cout << musicTitle.title << " " << musicTitle.album << " " << musicTitle.artist << " " << musicTitle.releaseYear << std::endl;
+        std::cout << std::left
+                  << std::setw(30) << "| " + truncateString(musicTitle.title, 28)
+                  << std::setw(20) << "| " + truncateString(musicTitle.album, 18)
+                  << std::setw(20) << "| " + truncateString(musicTitle.artist, 18)
+                  << std::setw(10) << "| " + std::to_string(musicTitle.releaseYear) + " |" << std::endl;
     }
+    
+    // Optionally, you can print a line at the bottom of the table
+    std::cout << std::setfill('-')
+              << std::setw(82) << "+" << std::setfill(' ') << std::endl;
 }
+
+
 
 void LibraryProvider::findTitle(const std::string& title) const {
     assert(!title.empty() && "Title should not be empty");
@@ -99,16 +127,4 @@ void LibraryProvider::search(const std::string& pattern) const {
             std::cout << musicTitle.title << " " << musicTitle.album << " " << musicTitle.artist << " " << musicTitle.releaseYear << std::endl;
         }
     }
-}
-
-void LibraryProvider::sortMusicTitles(std::vector<MusicTitle>& titles) const {
-    std::sort(titles.begin(), titles.end(), [](const MusicTitle& a, const MusicTitle& b) {
-        if (a.artist == b.artist) {
-            if (a.album == b.album) {
-                return a.title < b.title;
-            }
-            return a.album < b.album;
-        }
-        return a.artist < b.artist;
-    });
 }
