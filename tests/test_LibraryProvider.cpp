@@ -66,3 +66,22 @@ TEST_F(LibraryProviderTest, AddMusicTitleInvalidYear) {
         FAIL() << "Expected std::invalid_argument";
     }
 }
+
+TEST_F(LibraryProviderTest, AddMusicTitleYearOverflow) {
+    try {
+        std::string title = "InvalidYearTitle";
+        std::string album = "InvalidYearAlbum";
+        std::string artist = "InvalidYearArtist";
+        std::string invalidYear = "999999999999999999999999999999999999999999999";
+
+        // This should throw an exception
+        int year = std::stoi(invalidYear);
+        libraryProvider.addMusicTitle(MusicTitle(title, album, artist, year));
+
+        FAIL() << "Expected std::out_of_range";
+    } catch (const std::out_of_range& e) {
+        EXPECT_EQ(std::string(e.what()), "stoi");
+    } catch (...) {
+        FAIL() << "Expected std::out_of_range";
+    }
+}

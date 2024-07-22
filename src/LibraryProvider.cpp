@@ -80,18 +80,15 @@ void LibraryProvider::listMusicTitles() const {
     // musicTitles gets saved in sorted order on "LibraryProvider::loadFromFile" this way there is no need to sort again when listing all titles.
     auto sortedTitles = musicTitles;
     
-    // Print header
     std::cout << std::left
               << std::setw(30) << "| Title"
               << std::setw(20) << "| Album"
               << std::setw(20) << "| Artist"
               << std::setw(10) << "| Year |" << std::endl;
     
-    // Print a line under the header
     std::cout << std::setfill('-')
               << std::setw(82) << "+" << std::setfill(' ') << std::endl;
     
-    // Print each music title in a formatted manner with vertical lines
     for (const auto& musicTitle : sortedTitles) {
         std::cout << std::left
                   << std::setw(30) << "| " + truncateString(musicTitle.title, 28)
@@ -99,12 +96,10 @@ void LibraryProvider::listMusicTitles() const {
                   << std::setw(20) << "| " + truncateString(musicTitle.artist, 18)
                   << std::setw(10) << "| " + std::to_string(musicTitle.releaseYear) + " |" << std::endl;
     }
-    
-    // Optionally, you can print a line at the bottom of the table
+
     std::cout << std::setfill('-')
               << std::setw(82) << "+" << std::setfill(' ') << std::endl;
 }
-
 
 
 void LibraryProvider::findTitle(const std::string& title) const {
