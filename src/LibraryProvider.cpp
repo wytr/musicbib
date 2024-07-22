@@ -52,8 +52,7 @@ void LibraryProvider::addMusicTitle(const MusicTitle& musicTitle) {
     assert(!musicTitle.album.empty() && "Album should not be empty");
     assert(!musicTitle.artist.empty() && "Artist should not be empty");
     assert(musicTitle.releaseYear > 0 && "Release year should be positive");
-
-    // Find the correct position to insert the new title to maintain sorted order
+    musicTitles.push_back(musicTitle);
     sortMusicTitles(musicTitles);
 }
 
