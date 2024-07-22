@@ -48,6 +48,11 @@ int main(int argc, char* argv[]) {
             printUsage();
             delete libraryProvider;
             return 1;
+        }catch (const std::out_of_range& e) {
+            std::cerr << "Hey there in the Future.\n";
+            printUsage();
+            delete libraryProvider;
+            return 1;
         }
     } else {
         printUsage();
